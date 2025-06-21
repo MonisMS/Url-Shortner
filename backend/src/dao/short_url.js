@@ -1,8 +1,10 @@
 
 import shortUrl from "../models/shortUrl.model.js"
 import urlSchema from "../models/shortUrl.model.js"
+import { ConflictError } from "../utils/errorHandler.js"
 export const saveShortUrl = async (shortUrl,longUrl,userId) => {
-     const newUrl = new urlSchema ({
+   try{
+    const newUrl = new urlSchema ({
 
         full_url : longUrl,
         shortUrl : shortUrl
@@ -10,8 +12,11 @@ export const saveShortUrl = async (shortUrl,longUrl,userId) => {
     if(userId){
         newUrl.user = userId    
     }
-    newUrl.save()
+    await newUrl.save()
+}catch(err){
+    throw new ConflictError(err)
+}
 }
 export const getShortUrl = async (shortUrl) => {
-    return await urlSchema.findOne({shortUrl:shortUrl})
+    return await urlSchema.findOneAndUpdate({shortUrl:shortUrl},{$inc:{clicks:1}})
 }
