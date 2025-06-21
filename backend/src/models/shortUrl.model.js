@@ -17,11 +17,10 @@ clicks: {
     required: true,
     default: 0
 },
-/*user : {
+user : {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-},*/
+    ref: "User"
+},
 })
 
 const shortUrl = mongoose.model("shortURL", shortUrlSchema)
