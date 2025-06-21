@@ -6,11 +6,13 @@ import urlSchema from './models/shortUrl.model.js';
 import shot_url from './routes/short_url.route.js';
 import { redirectFromShortUrl } from './controllers/short_url.controller.js';
 import { errorHandler } from './utils/errorHandler.js';
+import cors from 'cors'
 dotenv.config()
 
 const app= express();
 const PORT = 3000;
 connectDB()
+app.use(cors())
 //Body parser
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
