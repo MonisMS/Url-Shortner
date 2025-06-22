@@ -1,7 +1,7 @@
-import React from 'react'
-import axios from 'axios';
+
 import { FiLink, FiCopy, FiCheck, FiGithub } from 'react-icons/fi';
 import { useState } from 'react';
+import { createShortUrl } from '../api/shortUrl.api.js';
 const UrlForm = () => {
     const [url, setUrl] = useState('https://www.google.com');
     const [shortUrl, setShortUrl] = useState('');
@@ -9,26 +9,24 @@ const UrlForm = () => {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState('');
 
+
     const handleSubmit = async (e) => {
   e.preventDefault();
-  
+
   if (!url) {
     setError('Please enter a URL');
     return;
   }
-  
+
   setIsLoading(true);
   setError('');
-  
-  try {
-    const response = await axios.post("http://localhost:3000/api/create", { url });
-    console.log(response.data); 
-    
 
-    setShortUrl(response.data);
-  } catch (err) {
-    console.error("Error:", err);
-    setError('Failed to shorten URL');
+  try {
+    const shortUrl = await createShortUrl(url);
+    setShortUrl(shortUrl);
+  } catch (error) {
+    console.error('Error shortening URL:', error);
+    setError(error.message || 'Failed to shorten URL');
   } finally {
     setIsLoading(false);
   }
